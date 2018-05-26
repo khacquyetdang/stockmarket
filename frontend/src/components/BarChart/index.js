@@ -1,15 +1,15 @@
 import {
-  Bar
+  Line,
 } from 'vue-chartjs';
 import moment from 'moment';
 
 export default {
-  extends: Bar,
+  extends: Line,
   computed: {
     size: function() {
       return {
-        width: 1000,
-        height: 300
+        width: 800,
+        height: 200
       };
     },
     config: function() {
@@ -26,7 +26,7 @@ export default {
       }
 
       return {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: labels,
           datasets: [{
@@ -36,7 +36,7 @@ export default {
             pointRadius: 0,
             fill: false,
             lineTension: 0,
-            borderWidth: 2
+            borderWidth: 1
           }]
         },
         options: {
@@ -76,12 +76,12 @@ export default {
   mounted() {
     // Overwriting base render method with actual data.
     this.renderChart({
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      datasets: [{
-        label: 'GitHub Commits',
-        backgroundColor: '#f87979',
-        data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-      }]
+      labels: this.config.data.labels,
+      datasets: this.config.data.datasets
+    }, {
+      ...this.config.options,
+      responsive: true,
+      maintainAspectRatio: false
     });
   }
 };
