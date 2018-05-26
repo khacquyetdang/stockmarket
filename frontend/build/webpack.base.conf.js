@@ -1,11 +1,15 @@
-'use strict'
-const path = require('path')
-const utils = require('./utils')
-const config = require('../config')
-const vueLoaderConfig = require('./vue-loader.conf')
+'use strict';
+const path = require('path');
+const utils = require('./utils');
+const config = require('../config');
+const vueLoaderConfig = require('./vue-loader.conf');
 
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+// console.log(path.join(__dirname, 'index.html'));
+
+function resolve(dir) {
+  let res = path.join(__dirname, '..', dir);
+  console.log("resolve res", res);
+  return res;
 }
 
 const createLintingRule = () => ({
@@ -17,7 +21,7 @@ const createLintingRule = () => ({
     formatter: require('eslint-friendly-formatter'),
     emitWarning: !config.dev.showEslintErrorsInOverlay
   }
-})
+});
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
@@ -27,9 +31,8 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: process.env.NODE_ENV === 'production' ?
+      config.build.assetsPublicPath : config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -74,7 +77,12 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+      {
+        test: /\.html$/,
+        use: 'vue-template-loader',
+        exclude: path.resolve('./index.html'),
+      },
     ]
   },
   node: {
@@ -89,4 +97,4 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty'
   }
-}
+};
