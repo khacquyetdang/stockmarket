@@ -9,7 +9,7 @@ export default {
     size: function() {
       return {
         width: 800,
-        height: 200
+        height: 100
       };
     },
     config: function() {
@@ -33,10 +33,10 @@ export default {
             label: 'CHRT - Chart.js Corporation',
             data: data,
             type: 'line',
-            pointRadius: 0,
-            fill: false,
+            pointRadius: 2,
+            fill: true,
             lineTension: 0,
-            borderWidth: 1
+            borderWidth: 2,
           }]
         },
         options: {

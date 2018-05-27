@@ -1,3 +1,12 @@
 <div>
   company
+  <v-form autocomplete="off" ref="form" lazy-validation="lazy-validation">
+
+    <v-text-field placeholder="New choice" v-model="newchoice" data-vv-name="newchoice" v-validate="'required|min:6'" data-vv-delay="100"
+      data-vv-rules="required" solo required append-icon="send" :append-icon-cb="newchoiceSend" :error-messages="errors.collect('newchoice')"
+      class="newchoice"></v-text-field>
+    <v-alert class="customerror" v-if="error !== null" type="error" :value="true" v-html="error" />
+
+  </v-form>
+
 </div>

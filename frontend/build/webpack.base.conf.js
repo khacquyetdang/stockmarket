@@ -80,9 +80,9 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        use: 'vue-template-loader',
+        loader: 'vue-template-loader',
         exclude: path.resolve('./index.html'),
-      },
+      }
     ]
   },
   node: {

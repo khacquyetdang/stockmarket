@@ -1,9 +1,10 @@
-import App from './index.html';
+import App from './index.html?style=./app.css';
 
 export default App({
   data() {
     return {
-      companies: []
+      companies: [],
+      newchoice: null,
     };
   }
 });
