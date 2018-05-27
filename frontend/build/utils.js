@@ -16,8 +16,7 @@ exports.cssLoaders = function(options) {
   options = options || {};
 
   const cssLoader = {
-    enforce: 'post',
-    loader: 'css-loader',
+    loader: 'css-loader?modules',
     options: {
       sourceMap: options.sourceMap
     }

@@ -1,4 +1,4 @@
-import App from './index.html';
+import App from './index.html?style=./style.css';
 import Company from '../Company/index';
 import BarChart from '../BarChart/index';
 

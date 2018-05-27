@@ -5,7 +5,7 @@ import App from './App';
 
 import Vuetify from 'vuetify';
 import VeeValidate from 'vee-validate';
-
+import 'vuetify/dist/vuetify.min.css';
 import router from './router';
 
 Vue.use(VeeValidate);
