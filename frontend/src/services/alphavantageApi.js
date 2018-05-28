@@ -3,9 +3,9 @@ import store from '@/store/store';
 
 function alphavantageApi() {
   return axios.create({
-    baseURL: process.env.baseURL,
-    headers: {
-      Authorization: `Bearer ${store.getters.getToken}`,
+    baseURL: "https://www.alphavantage.co/query",
+    params: {
+      apikey: `${store.getters.getApiKey}`,
     },
   });
 };

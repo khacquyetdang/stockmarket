@@ -5,6 +5,7 @@ import App from './App';
 
 import Vuetify from 'vuetify';
 import VeeValidate from 'vee-validate';
+import store from '@/store/store';
 import 'vuetify/dist/vuetify.min.css';
 import router from './router';
 
@@ -17,6 +18,7 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
+  store,
   components: {
     App
   },

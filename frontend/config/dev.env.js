@@ -1,7 +1,11 @@
-'use strict'
-const merge = require('webpack-merge')
-const prodEnv = require('./prod.env')
+'use strict';
+const dotenv = require('dotenv');
 
-module.exports = merge(prodEnv, {
-  NODE_ENV: '"development"'
-})
+dotenv.load({
+  path: '.env.development'
+});
+
+module.exports = {
+  NODE_ENV: '"development"',
+  apikey: JSON.stringify(process.env.ALPHAVANTAGE)
+};
