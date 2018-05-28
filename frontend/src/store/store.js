@@ -7,71 +7,58 @@ const options = {
   strict: true,
   state: {
     apikey: process.env.apikey,
-    stockmonthly: new Map(),
+    stockmonthly: {},
+    stockmonthlyvalues: {},
+    stockmonthlabels: [],
+
     stockdaily: new Map(),
     stockweekly: new Map()
   },
 
   getters: {
-    getPolls(state) {
-      return state.polls;
-    },
-    getMyPolls(state) {
-      return state.mypolls;
-    },
     getApiKey(state) {
       return state.apikey;
     },
-    getIdUser(state) {
-      return state.user.id_user;
+    getStockMonthLabels(state) {
+      return state.stockmonthlabels;
     },
+
+    getStockMonthValues(state) {
+      return state.stockmonthlyvalues;
+    },
+    getStockMonth(state) {
+      return state.stockmonthly;
+    }
 
   },
   mutations: {
-    setUser: function(state, user) {
-      if (user) {
-        state.user.token = user.access_token;
-        state.user.id_user = user.id_user;
-        state.isUserLoggedIn = true;
-      } else {
-        state.user.token = null;
-        state.user.id_user = null;
-        state.isUserLoggedIn = false;
-      }
+    setStockMonthLabel: function(state, labels) {
+      state.stockmonthlabels = labels;
     },
-    setPolls: function(state, polls) {
-      state.polls = polls;
-      polls.forEach(poll => {
-        state.pollsbyId.set(poll._id, poll);
-      });
+    setStockMonthValues: function(state, params) {
+      state.stockmonthlyvalues[params.symbol] = params.values;
     },
-    setMyPolls: function(state, polls) {
-      state.mypolls = polls;
-    },
-    toggleDrawer: function(state, drawer) {
-      state.drawer = drawer;
+    setStockMonth: function(state, params) {
+      state.stockmonthly[params.symbol] = params.stockmonth;
     },
   },
   actions: {
-    setMyPolls: function({
+    setStockMonthLabel: function({
       commit
-    }, polls) {
-      commit('setMyPolls', polls);
+    }, labels) {
+      commit('setStockMonthLabel', labels);
     },
-    setPolls: function({
-      commit
-    }, polls) {
-      commit('setPolls', polls);
+    setStockMonthValues: function({
+        commit
+      },
+      params
+    ) {
+      commit('setStockMonthValues', params);
     },
-    setUser: function({
+    setStockMonth: function({
       commit
-    }, user) {
-      commit('setUser', user);
-    },
-    toggleDrawer: function({
-      commit
-    }, drawer) {
-      commit('toggleDrawer', drawer);
+    }, params) {
+      commit('setStockMonth', params);
     },
   },
 };

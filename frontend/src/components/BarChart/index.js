@@ -1,10 +1,21 @@
 import {
   Line,
 } from 'vue-chartjs';
-import moment from 'moment';
+
+import {
+  mapGetters
+} from 'vuex';
+// import moment from 'moment';
 
 export default {
   extends: Line,
+  data: function() {
+    return { ...mapGetters({
+        labels: 'getStockMonthLabels',
+        datasets: 'getStockMonthValues'
+      })
+    };
+  },
   computed: {
     size: function() {
       return {
@@ -12,32 +23,29 @@ export default {
         height: 100
       };
     },
-    config: function() {
-      var dateFormat = 'MMMM DD YYYY';
-      var date = moment('April 01 2017', dateFormat);
-      var data = [this.randomBar(date, 30)];
-      var labels = [date];
-      while (data.length < 60) {
-        date = date.clone().add(1, 'd');
-        if (date.isoWeekday() <= 5) {
-          data.push(this.randomBar(date, data[data.length - 1].y));
-          labels.push(date);
-        }
-      }
 
+    config: function() {
+
+      let labels = this.labels();
+      let datasets = [];
+      let stockMonthValues = this.datasets();
+      Object.keys(stockMonthValues).forEach((value) => {
+        datasets.push({
+          label: value,
+          data: stockMonthValues[value].map(element =>
+            element["4. close"]),
+          type: 'line',
+          pointRadius: 2,
+          fill: true,
+          lineTension: 0,
+          borderWidth: 2,
+        });
+      });
       return {
         type: 'line',
         data: {
-          labels: labels,
-          datasets: [{
-            label: 'CHRT - Chart.js Corporation',
-            data: data,
-            type: 'line',
-            pointRadius: 2,
-            fill: true,
-            lineTension: 0,
-            borderWidth: 2,
-          }]
+          labels,
+          datasets
         },
         options: {
           scales: {
@@ -45,7 +53,20 @@ export default {
               type: 'time',
               distribution: 'series',
               ticks: {
-                source: 'labels'
+                source: 'labels',
+                callback: function(label, index, labels) {
+                  if (labels.length > 100) {
+                    if (index % 10 === 0) {
+                      return label;
+                    }
+                    return "";
+                  } else {
+                    if (index % 5 === 0) {
+                      return label;
+                    }
+                    return "";
+                  }
+                }
               }
             }],
             yAxes: [{
@@ -73,8 +94,12 @@ export default {
       };
     }
   },
+
   mounted() {
-    // Overwriting base render method with actual data.
+    console.log("bar mounted");
+    if (this.$data._chart) {
+      this.$data._chart.destroy();
+    }
     this.renderChart({
       labels: this.config.data.labels,
       datasets: this.config.data.datasets
@@ -83,5 +108,22 @@ export default {
       responsive: true,
       maintainAspectRatio: false
     });
+  },
+  watch: {
+    config: function(val) {
+      console.log("val config", val);
+      if (this.$data._chart) {
+        this.$data._chart.destroy();
+
+        this.renderChart({
+          labels: val.data.labels,
+          datasets: val.data.datasets
+        }, {
+          ...val.options,
+          responsive: true,
+          maintainAspectRatio: false
+        });
+      }
+    }
   }
 };
