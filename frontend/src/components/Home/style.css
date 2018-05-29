@@ -1,3 +1,5 @@
 .barchartContainer {
   margin: 10px 20px;
+  overflow-x: auto;
+  overflow: auto;
 }

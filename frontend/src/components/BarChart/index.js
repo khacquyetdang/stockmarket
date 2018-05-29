@@ -17,13 +17,6 @@ export default {
     };
   },
   computed: {
-    size: function() {
-      return {
-        width: 800,
-        height: 100
-      };
-    },
-
     config: function() {
 
       let labels = this.labels();
@@ -48,6 +41,8 @@ export default {
           datasets
         },
         options: {
+          maintainAspectRatio: false,
+          responsive: true,
           scales: {
             xAxes: [{
               type: 'time',
@@ -80,20 +75,6 @@ export default {
       };
     },
   },
-  methods: {
-    randomNumber(min, max) {
-      return Math.random() * (max - min) + min;
-    },
-
-    randomBar(date, lastClose) {
-      var open = this.randomNumber(lastClose * 0.95, lastClose * 1.05);
-      var close = this.randomNumber(open * 0.95, open * 1.05);
-      return {
-        t: date.valueOf(),
-        y: close
-      };
-    }
-  },
 
   mounted() {
     console.log("bar mounted");
@@ -103,26 +84,20 @@ export default {
     this.renderChart({
       labels: this.config.data.labels,
       datasets: this.config.data.datasets
-    }, {
-      ...this.config.options,
-      responsive: true,
-      maintainAspectRatio: false
-    });
+    }, this.config.options, );
   },
   watch: {
     config: function(val) {
       console.log("val config", val);
+      console.log("width ", this.width);
+      console.log("styles", this.styles);
       if (this.$data._chart) {
         this.$data._chart.destroy();
 
         this.renderChart({
           labels: val.data.labels,
           datasets: val.data.datasets
-        }, {
-          ...val.options,
-          responsive: true,
-          maintainAspectRatio: false
-        });
+        }, val.options);
       }
     }
   }

@@ -13,4 +13,21 @@ export default App({
       msg: 'Welcome to Your Vue.js App',
     };
   },
+  computed: {
+    styles: function() {
+      if (this.$store.getters.getStockMonthLabels.length > 200)
+        return {
+          width: '3000px'
+        };
+      if (this.$store.getters.getStockMonthLabels.length > 100) {
+        return {
+          width: '2000px'
+        };
+      }
+      return {
+        width: '1200px'
+      };
+    },
+
+  }
 });
