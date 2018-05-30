@@ -26,8 +26,8 @@ export default {
         stockmonth: response.data['Monthly Time Series'],
       });
       return true;
-    } catch (exception) {
-      console.error('error:', exception);
+    } catch (error) {
+      console.error('error:', error);
     }
     return false;
   },

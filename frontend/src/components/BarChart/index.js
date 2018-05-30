@@ -2,28 +2,30 @@ import {
   Line,
 } from 'vue-chartjs';
 
-import {
+/* import {
   mapGetters
-} from 'vuex';
+} from 'vuex'; */
 
 import randomColor from 'randomcolor';
 // import moment from 'moment';
 
 export default {
   extends: Line,
-  data: function() {
-    return { ...mapGetters({
-        labels: 'getStockMonthLabels',
-        datasets: 'getStockMonthValues'
-      })
-    };
-  },
   computed: {
+    datasets: function() {
+      return this.$store.getters.getStockMonthValues;
+    },
+    labels: function() {
+      return this.$store.getters.getStockMonthLabels;
+    },
+    newsymbol: function() {
+      return this.$store.getters.getnewsymbols;
+    },
     config: function() {
 
-      let labels = this.labels();
+      let labels = this.labels;
       let datasets = [];
-      let stockMonthValues = this.datasets();
+      let stockMonthValues = this.datasets;
       Object.keys(stockMonthValues).forEach((value) => {
         let colorDataset = randomColor();
         datasets.push({
@@ -91,6 +93,20 @@ export default {
     }, this.config.options, );
   },
   watch: {
+    labels: function(oldLabels, newLabels) {
+      console.log("oldLabels", oldLabels);
+      console.log("newLabels", newLabels);
+
+    },
+    datasets: function(newDataSet, oldDataSet) {
+      console.log("newDataSet", newDataSet);
+      console.log("oldDatset", oldDataSet);
+    },
+    newsymbol: function(newsymbol, oldsymbol) {
+      console.log("newsymbol", newsymbol);
+      console.log("oldsymbol", oldsymbol);
+
+    },
     config: function(val) {
       console.log("val config", val);
       console.log("width ", this.width);

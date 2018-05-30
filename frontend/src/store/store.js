@@ -10,12 +10,15 @@ const options = {
     stockmonthly: {},
     stockmonthlyvalues: {},
     stockmonthlabels: [],
-
+    newsymbols: null,
     stockdaily: new Map(),
     stockweekly: new Map()
   },
 
   getters: {
+    getnewsymbols(state) {
+      return state.newsymbols;
+    },
     getApiKey(state) {
       return state.apikey;
     },
@@ -33,13 +36,21 @@ const options = {
   },
   mutations: {
     setStockMonthLabel: function(state, labels) {
-      state.stockmonthlabels = labels;
+      if (state.stockmonthlabels && state.stockmonthlabels.length < labels.length) {
+        state.stockmonthlabels = labels;
+      }
     },
     setStockMonthValues: function(state, params) {
-      state.stockmonthlyvalues[params.symbol] = params.values;
+      let newsymbols = params.symbol;
+      let newvalues = params.values;
+      let newStockMonthValues = Object.assign({}, state.stockmonthlyvalues);
+      newStockMonthValues[newsymbols] = newvalues;
+      state.stockmonthlyvalues = newStockMonthValues;
     },
     setStockMonth: function(state, params) {
-      state.stockmonthly[params.symbol] = params.stockmonth;
+      let newStockMonthly = Object.assign({}, state.stockmonthly);
+      newStockMonthly[params.symbol] = params.stockmonth;
+      state.stockmonthly = newStockMonthly;
     },
   },
   actions: {

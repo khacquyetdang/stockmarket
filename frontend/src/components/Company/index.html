@@ -8,7 +8,9 @@
           <v-text-field placeholder="New company symbol (NASDAQ code)" v-model="newsymbol" data-vv-name="newsymbol" v-validate="'required'"
             data-vv-delay="100" data-vv-rules="required" solo required append-icon="add" :append-icon-cb="addCompanyStockSymbole"
             :error-messages="errors.collect('newchoice')" class="newstock"></v-text-field>
-          <v-alert class="customerror" v-if="error !== null" type="error" :value="true" v-html="error" />
+          <v-alert v-if="error !== null" type="error" :value="true" v-html="error">
+          </v-alert>
+
 
         </v-form>
       </v-flex>
