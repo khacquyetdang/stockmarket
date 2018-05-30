@@ -11,6 +11,26 @@ function alphavantageApi() {
 };
 
 export default {
+  async fetchStockMonthly(symbol) {
+    try {
+      const response = await this.getStockValueMonthly(symbol);
+      let labels = Object.keys(response.data['Monthly Time Series']);
+      let values = Object.values(response.data['Monthly Time Series']);
+      store.dispatch('setStockMonthLabel', labels);
+      store.dispatch('setStockMonthValues', {
+        symbol,
+        values,
+      });
+      store.dispatch('setStockMonth', {
+        symbol,
+        stockmonth: response.data['Monthly Time Series'],
+      });
+      return true;
+    } catch (exception) {
+      console.error('error:', exception);
+    }
+    return false;
+  },
   getStockValueMonthly: function(stocksymbol) {
     return alphavantageApi().get('', {
       params: {

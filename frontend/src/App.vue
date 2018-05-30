@@ -13,26 +13,8 @@ export default {
     this.fetchStockMonthly('MSFT');
   },
   methods: {
-    async fetchStockMonthly(symbol) {
-      try {
-        const response = await Api.getStockValueMonthly(symbol);
-        let labels = Object.keys(response.data['Monthly Time Series']);
-        let values = Object.values(response.data['Monthly Time Series']);
-        this.$store.dispatch('setStockMonthLabel', labels);
-        this.$store.dispatch('setStockMonthValues', {
-          symbol,
-          values,
-        });
-        this.$store.dispatch('setStockMonth', {
-          symbol,
-          stockmonth: response.data['Monthly Time Series'],
-        });
-        console.log('store', this.$store);
-        this.$forceUpdate();
-        console.log('response', response);
-      } catch (exception) {
-        console.error('error:', exception);
-      }
+    fetchStockMonthly(symbol) {
+      Api.fetchStockMonthly(symbol);
     },
   },
 };

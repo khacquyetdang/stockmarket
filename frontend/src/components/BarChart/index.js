@@ -5,6 +5,8 @@ import {
 import {
   mapGetters
 } from 'vuex';
+
+import randomColor from 'randomcolor';
 // import moment from 'moment';
 
 export default {
@@ -23,10 +25,12 @@ export default {
       let datasets = [];
       let stockMonthValues = this.datasets();
       Object.keys(stockMonthValues).forEach((value) => {
+        let colorDataset = randomColor();
         datasets.push({
           label: value,
           data: stockMonthValues[value].map(element =>
             element["4. close"]),
+          borderColor: colorDataset,
           type: 'line',
           pointRadius: 2,
           fill: true,
