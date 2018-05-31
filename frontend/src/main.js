@@ -8,17 +8,25 @@ import VeeValidate from 'vee-validate';
 import store from '@/store/store';
 import 'vuetify/dist/vuetify.min.css';
 import router from './router';
+import * as constants from './constants';
 
 Vue.use(VeeValidate);
 Vue.use(Vuetify);
 
 Vue.config.productionTip = false;
 
+store.subscribe((mutation, state) => {
+  localStorage.setItem(constants.stockMarketStoreKey, JSON.stringify(state));
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
+  beforeCreate() {
+    this.$store.commit('initialiseStore');
+  },
   components: {
     App
   },

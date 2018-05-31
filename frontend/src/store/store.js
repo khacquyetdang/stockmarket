@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import * as constants from '../constants';
+import {
+  version
+} from '../../package.json';
 Vue.use(Vuex);
 
 const options = {
   strict: true,
   state: {
+    version: '',
     apikey: process.env.apikey,
     stockmonthly: {},
     stockmonthlyvalues: {},
@@ -35,6 +39,21 @@ const options = {
 
   },
   mutations: {
+    initialiseStore(state) {
+      // Check if the ID exists
+      if (localStorage.getItem(constants.stockMarketStoreKey)) {
+        let store = JSON.parse(localStorage.getItem(constants.stockMarketStoreKey));
+
+        // Replace the state object with the stored item
+        if (store.version === version) {
+          this.replaceState(
+            Object.assign(state, store)
+          );
+        } else {
+          state.version = version;
+        }
+      }
+    },
     setStockMonthLabel: function(state, labels) {
       if (state.stockmonthlabels && state.stockmonthlabels.length < labels.length) {
         state.stockmonthlabels = labels;

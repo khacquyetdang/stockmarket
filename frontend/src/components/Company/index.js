@@ -10,7 +10,6 @@ export default App({
   },
   methods: {
     addCompanyStockSymbole: async function() {
-      console.log("addCompanyStockSymbole", this.newsymbol);
       if (this.newsymbol) {
         this.newsymbol = this.newsymbol.trim();
         // let res = await Api.fetchStockMonthly(this.newsymbol);
@@ -20,10 +19,7 @@ export default App({
           this.error = "<div>An error has occured. The symbol may not  exist</div>";
         } else {
           this.error = null;
-
         }
-        // this.$forceUpdate();
-        console.log('res', res);
       }
     }
   }
