@@ -5,12 +5,17 @@ import {
 /* import {
   mapGetters
 } from 'vuex'; */
-
+import './index.css';
 import randomColor from 'randomcolor';
 // import moment from 'moment';
 
 export default {
   extends: Line,
+  data() {
+    return {
+      colors: []
+    };
+  },
   computed: {
     datasets: function() {
       return this.$store.getters.getStockMonthValues;
@@ -21,13 +26,15 @@ export default {
     newsymbol: function() {
       return this.$store.getters.getnewsymbols;
     },
+
     config: function() {
 
       let labels = this.labels;
       let datasets = [];
       let stockMonthValues = this.datasets;
-      Object.keys(stockMonthValues).forEach((value) => {
+      Object.keys(stockMonthValues).forEach((value, index) => {
         let colorDataset = randomColor();
+        this.colors.push(colorDataset);
         datasets.push({
           label: value,
           data: stockMonthValues[value].map(element =>
@@ -76,41 +83,123 @@ export default {
                 labelString: 'Closing price ($)'
               }
             }]
-          }
+          },
         }
       };
     },
   },
+  methods: {
+    customTooltips: function(tooltip) {
+      console.log("custom tooltips");
+      // Tooltip Element
+      var tooltipEl = document.getElementById('chartjs-tooltip');
 
+      if (!tooltipEl) {
+        tooltipEl = document.createElement('div');
+        tooltipEl.id = 'chartjs-tooltip';
+        tooltipEl.innerHTML = '<table></table>';
+        this.$data._chart.canvas.parentNode.appendChild(tooltipEl);
+      }
+
+      // Hide if no tooltip
+      if (tooltip.opacity === 0) {
+        tooltipEl.style.opacity = 0;
+        return;
+      }
+
+      // Set caret Position
+      tooltipEl.classList.remove('above', 'below', 'no-transform');
+      if (tooltip.yAlign) {
+        tooltipEl.classList.add(tooltip.yAlign);
+      } else {
+        tooltipEl.classList.add('no-transform');
+      }
+
+      function getBody(bodyItem) {
+        return bodyItem.lines;
+      }
+
+      // Set Text
+      if (tooltip.body) {
+        var titleLines = tooltip.title || [];
+        var bodyLines = tooltip.body.map(getBody);
+
+        var innerHtml = '<thead>';
+
+        titleLines.forEach(function(title) {
+          innerHtml += '<tr><th>' + title + '</th></tr>';
+        });
+        innerHtml += '</thead><tbody>';
+
+        bodyLines.forEach(function(body, i) {
+          var colors = tooltip.labelColors[i];
+          var style = 'background:' + colors.backgroundColor;
+          style += '; border: solid 2px ' + colors.borderColor;
+          style += '; border-width: 2px';
+          var span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
+          innerHtml += '<tr><td>' + span + body + '</td></tr>';
+        });
+        innerHtml += '</tbody>';
+
+        var tableRoot = tooltipEl.querySelector('table');
+        tableRoot.innerHTML = innerHtml;
+      }
+
+      var positionY = this.$data._chart.canvas.offsetTop;
+      var positionX = this.$data._chart.canvas.offsetLeft;
+
+      // Display, position, and set styles for font
+      tooltipEl.style.opacity = 1;
+      tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+      tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+      tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
+      tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
+      tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
+      tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+    },
+  },
   mounted() {
     console.log("bar mounted");
     if (this.$data._chart) {
       this.$data._chart.destroy();
     }
+
+
+    let self = this;
+    this.config.options.tooltips = {
+      enabled: true,
+      mode: 'index',
+      borderWidth: 20,
+      bodySpacing: 10,
+      titleSpacing: 10,
+      backgroundColor: "rgba(0, 0, 0, 0.9)",
+      // custom: this.customTooltips,
+      callbacks: {
+        labelColor: function(tooltipItem, chart) {
+          return {
+            // borderColor: "red",
+            backgroundColor: self.colors[tooltipItem.datasetIndex],
+            borderColor: "rgba(0, 0, 0, 0.9)" // self.colors[tooltipItem.datasetIndex],
+          };
+        },
+        labelTextColor: function(tooltipItem, chart) {
+          return 'white';
+        }
+      }
+    };
     this.renderChart({
       labels: this.config.data.labels,
       datasets: this.config.data.datasets
     }, this.config.options, );
   },
+  /*
   watch: {
-    labels: function(oldLabels, newLabels) {
-      console.log("oldLabels", oldLabels);
-      console.log("newLabels", newLabels);
-
-    },
-    datasets: function(newDataSet, oldDataSet) {
-      console.log("newDataSet", newDataSet);
-      console.log("oldDatset", oldDataSet);
-    },
-    newsymbol: function(newsymbol, oldsymbol) {
-      console.log("newsymbol", newsymbol);
-      console.log("oldsymbol", oldsymbol);
-
-    },
     config: function(val) {
       console.log("val config", val);
       console.log("width ", this.width);
       console.log("styles", this.styles);
+
+
       if (this.$data._chart) {
         this.$data._chart.destroy();
 
@@ -120,5 +209,5 @@ export default {
         }, val.options);
       }
     }
-  }
+  } */
 };
