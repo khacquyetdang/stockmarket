@@ -1,12 +1,14 @@
 import App from './index.html?style=./style.css';
 import Company from '../Company/index';
 import BarChart from '../BarChart/index';
+import Legende from '../Legende/index';
 
 export default App({
   name: 'Home',
   components: {
     Company,
-    BarChart
+    BarChart,
+    Legende
   },
   data() {
     return {

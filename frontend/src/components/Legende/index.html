@@ -1,0 +1,7 @@
+<div class="legend">
+  <div class="item" v-for="stocksymbol in companysymbols">
+    <div :style="getStylesForSymbol(stocksymbol)">
+    </div>
+    <strong>{{ stocksymbol }} </strong>
+  </div>
+</div>

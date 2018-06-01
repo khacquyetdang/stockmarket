@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as constants from '../constants';
+import randomColor from 'randomcolor';
 import {
   version
 } from '../../package.json';
 Vue.use(Vuex);
 
+let colorPanel = ['red', 'pink', 'purple', '#673AB7', '#3F51B5', '#2196F3', '#4CAF50', '#CDDC39', '#FFC107', '#795548'];
 const options = {
   strict: true,
   state: {
@@ -15,6 +17,7 @@ const options = {
     stockmonthlyvalues: {},
     stockmonthlabels: [],
     newsymbols: null,
+    stockcolors: {},
     stockdaily: new Map(),
     stockweekly: new Map()
   },
@@ -35,6 +38,9 @@ const options = {
     },
     getStockMonth(state) {
       return state.stockmonthly;
+    },
+    getStockcolors(state) {
+      return state.stockcolors;
     }
 
   },
@@ -65,6 +71,16 @@ const options = {
       let newStockMonthValues = Object.assign({}, state.stockmonthlyvalues);
       newStockMonthValues[newsymbols] = newvalues;
       state.stockmonthlyvalues = newStockMonthValues;
+
+      let stockcolors = {};
+      Object.keys(state.stockmonthlyvalues).forEach((value, index) => {
+        if (index < colorPanel.length) {
+          stockcolors[value] = colorPanel[index];
+        } else {
+          stockcolors[value] = randomColor();
+        }
+      });
+      state.stockcolors = stockcolors;
     },
     setStockMonth: function(state, params) {
       let newStockMonthly = Object.assign({}, state.stockmonthly);

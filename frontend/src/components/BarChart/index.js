@@ -6,7 +6,6 @@ import {
   mapGetters
 } from 'vuex'; */
 import './index.css';
-import randomColor from 'randomcolor';
 // import moment from 'moment';
 
 export default {
@@ -32,8 +31,9 @@ export default {
       let labels = this.labels;
       let datasets = [];
       let stockMonthValues = this.datasets;
+      let colorsSymbols = this.$store.getters.getStockcolors;
       Object.keys(stockMonthValues).forEach((value, index) => {
-        let colorDataset = randomColor();
+        let colorDataset = colorsSymbols[value];
         this.colors.push(colorDataset);
         datasets.push({
           label: value,
@@ -47,6 +47,7 @@ export default {
           borderWidth: 2,
         });
       });
+      let self = this;
       return {
         type: 'line',
         data: {
@@ -84,6 +85,37 @@ export default {
               }
             }]
           },
+          tooltips: {
+            enabled: true,
+            mode: 'index',
+            borderWidth: 2,
+            borderColor: 'rgba(33, 150, 243, 0.75)',
+            bodySpacing: 10,
+            titleSpacing: 10,
+            titleFontSize: 16,
+            caretSize: 10,
+            cornerRadius: 1,
+            xPadding: 10,
+            yPadding: 10,
+            labelColor: "rgba(0, 0, 0, 0.9)",
+            titleFontColor: "rgba(0, 0, 0, 0.9)",
+            // backgroundColor: "rgba(33, 150, 243, 0.1)",
+            backgroundColor: "white",
+
+            // custom: this.customTooltips,
+            callbacks: {
+              labelColor: function(tooltipItem, chart) {
+                return {
+                  // borderColor: "red",
+                  backgroundColor: self.colors[tooltipItem.datasetIndex],
+                  borderColor: "rgba(0, 0, 0, 0.9)" // self.colors[tooltipItem.datasetIndex],
+                };
+              },
+              labelTextColor: function(tooltipItem, chart) {
+                return "rgba(0, 0, 0, 0.9)";
+              }
+            }
+          }
         }
       };
     },
@@ -164,29 +196,6 @@ export default {
       this.$data._chart.destroy();
     }
 
-
-    let self = this;
-    this.config.options.tooltips = {
-      enabled: true,
-      mode: 'index',
-      borderWidth: 20,
-      bodySpacing: 10,
-      titleSpacing: 10,
-      backgroundColor: "rgba(0, 0, 0, 0.9)",
-      // custom: this.customTooltips,
-      callbacks: {
-        labelColor: function(tooltipItem, chart) {
-          return {
-            // borderColor: "red",
-            backgroundColor: self.colors[tooltipItem.datasetIndex],
-            borderColor: "rgba(0, 0, 0, 0.9)" // self.colors[tooltipItem.datasetIndex],
-          };
-        },
-        labelTextColor: function(tooltipItem, chart) {
-          return 'white';
-        }
-      }
-    };
     this.renderChart({
       labels: this.config.data.labels,
       datasets: this.config.data.datasets
