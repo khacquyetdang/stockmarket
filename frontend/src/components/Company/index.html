@@ -1,16 +1,15 @@
 <div>
   <v-layout row="row" wrap="wrap" class="piechartdetail">
-    <v-flex xs12 sm12="sm12" md12="md12" justify-center align-center>
+    <v-flex justify-center align-center>
 
-      <v-flex md4 xs12 sm12 offset-md4>
+      <v-flex md3>
         <v-form autocomplete="off" ref="form" lazy-validation="lazy-validation">
 
-          <v-text-field placeholder="New company symbol (NASDAQ code)" v-model="newsymbol" data-vv-name="newsymbol" v-validate="'required'"
+          <v-text-field placeholder="company symbol (NASDAQ code)" v-model="newsymbol" data-vv-name="newsymbol" v-validate="'required'"
             data-vv-delay="100" data-vv-rules="required" solo required append-icon="add" :append-icon-cb="addCompanyStockSymbole"
             :error-messages="errors.collect('newchoice')" class="newstock"></v-text-field>
           <v-alert v-if="error !== null" type="error" :value="true" v-html="error">
           </v-alert>
-
 
         </v-form>
       </v-flex>

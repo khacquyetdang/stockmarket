@@ -18,11 +18,15 @@ const options = {
     stockmonthlabels: [],
     newsymbols: null,
     stockcolors: {},
+    stocktimefilter: 'open',
     stockdaily: new Map(),
     stockweekly: new Map()
   },
 
   getters: {
+    getstocktimefilter(state) {
+      return state.stocktimefilter || '1. open';
+    },
     getnewsymbols(state) {
       return state.newsymbols;
     },
@@ -87,6 +91,9 @@ const options = {
       newStockMonthly[params.symbol] = params.stockmonth;
       state.stockmonthly = newStockMonthly;
     },
+    setStocktimeFilter: function(state, activefilter) {
+      state.stocktimefilter = activefilter;
+    }
   },
   actions: {
     setStockMonthLabel: function({
@@ -106,6 +113,11 @@ const options = {
     }, params) {
       commit('setStockMonth', params);
     },
+    setStocktimeFilter: function({
+      commit
+    }, activefilter) {
+      commit('setStocktimeFilter', activefilter);
+    }
   },
 };
 

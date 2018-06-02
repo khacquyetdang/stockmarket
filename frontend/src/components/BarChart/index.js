@@ -2,9 +2,9 @@ import {
   Line,
 } from 'vue-chartjs';
 
-/* import {
+import {
   mapGetters
-} from 'vuex'; */
+} from 'vuex';
 import './index.css';
 // import moment from 'moment';
 
@@ -16,6 +16,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'getstocktimefilter'
+    ]),
     datasets: function() {
       return this.$store.getters.getStockMonthValues;
     },
@@ -25,20 +28,26 @@ export default {
     newsymbol: function() {
       return this.$store.getters.getnewsymbols;
     },
-
+    stocktimefilter: function() {
+      var res = this.$store.getters.getstocktimefilter;
+      console.log("stocktimefilter", res);
+      return res;
+    },
     config: function() {
 
       let labels = this.labels;
       let datasets = [];
       let stockMonthValues = this.datasets;
       let colorsSymbols = this.$store.getters.getStockcolors;
+      let activeStockTimeFilter = this.getstocktimefilter;
       Object.keys(stockMonthValues).forEach((value, index) => {
         let colorDataset = colorsSymbols[value];
         this.colors.push(colorDataset);
         datasets.push({
           label: value,
-          data: stockMonthValues[value].map(element =>
-            element["4. close"]),
+          data: stockMonthValues[value].map(function(element) {
+            return element[activeStockTimeFilter];
+          }),
           borderColor: colorDataset,
           type: 'line',
           pointRadius: 2,
@@ -57,6 +66,9 @@ export default {
         options: {
           maintainAspectRatio: false,
           responsive: true,
+          legend: {
+            display: false
+          },
           scales: {
             xAxes: [{
               type: 'time',
@@ -65,15 +77,15 @@ export default {
                 source: 'labels',
                 callback: function(label, index, labels) {
                   if (labels.length > 100) {
-                    if (index % 10 === 0) {
+                    if (index % 3 === 0) {
                       return label;
                     }
                     return "";
                   } else {
-                    if (index % 5 === 0) {
+                    if (index % 2 === 0) {
                       return label;
                     }
-                    return "";
+                    return label;
                   }
                 }
               }
@@ -81,7 +93,7 @@ export default {
             yAxes: [{
               scaleLabel: {
                 display: true,
-                labelString: 'Closing price ($)'
+                labelString: activeStockTimeFilter + ' price ($)'
               }
             }]
           },
@@ -200,14 +212,11 @@ export default {
       labels: this.config.data.labels,
       datasets: this.config.data.datasets
     }, this.config.options, );
+
   },
-  /*
+
   watch: {
     config: function(val) {
-      console.log("val config", val);
-      console.log("width ", this.width);
-      console.log("styles", this.styles);
-
 
       if (this.$data._chart) {
         this.$data._chart.destroy();
@@ -218,5 +227,5 @@ export default {
         }, val.options);
       }
     }
-  } */
+  }
 };
