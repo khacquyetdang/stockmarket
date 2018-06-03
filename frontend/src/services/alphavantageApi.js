@@ -17,6 +17,20 @@ export default {
       let monthlykeys = 'Monthly Time Series';
       let labels = Object.keys(response.data[monthlykeys]);
       let values = Object.values(response.data[monthlykeys]);
+
+
+
+      const responseWeekly = await this.getStockValueWeekly(symbol);
+      const weeklykeys = "Weekly Time Series";
+      let labelsWeekly = Object.keys(responseWeekly.data[weeklykeys]);
+      let valuesWeekly = Object.values(responseWeekly.data[weeklykeys]);
+
+
+      const responseDaily = await this.getStockValueDaily(symbol);
+      const dailykey = "Time Series (Daily)";
+      let labelsDaily = Object.keys(responseDaily.data[dailykey]);
+      let valuesDaily = Object.values(responseDaily.data[dailykey]);
+
       store.dispatch('setStockMonthlyLabel', labels);
       store.dispatch('setStockMonthlyValues', {
         symbol,
@@ -27,11 +41,6 @@ export default {
         stockmonthly: response.data[monthlykeys],
       });
 
-
-      const responseWeekly = await this.getStockValueWeekly(symbol);
-      const weeklykeys = "Weekly Time Series";
-      let labelsWeekly = Object.keys(responseWeekly.data[weeklykeys]);
-      let valuesWeekly = Object.values(responseWeekly.data[weeklykeys]);
       store.dispatch('setStockWeeklyLabel', labelsWeekly);
       store.dispatch('setStockWeeklyValues', {
         symbol,
@@ -43,10 +52,6 @@ export default {
       });
 
 
-      const responseDaily = await this.getStockValueDaily(symbol);
-      const dailykey = "Time Series (Daily)";
-      let labelsDaily = Object.keys(responseDaily.data[dailykey]);
-      let valuesDaily = Object.values(responseDaily.data[dailykey]);
       store.dispatch('setStockDailyLabel', labelsDaily);
       store.dispatch('setStockDailyValues', {
         symbol,

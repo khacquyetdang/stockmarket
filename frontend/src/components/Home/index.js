@@ -32,17 +32,9 @@ export default App({
   },
   computed: {
     styles: function() {
-      if (this.$store.getters.getStockMonthlyLabels.length > 200)
-        return {
-          width: '3500px'
-        };
-      if (this.$store.getters.getStockMonthlyLabels.length > 100) {
-        return {
-          width: '2000px'
-        };
-      }
+      let width = Math.max(this.$store.getters.getActiveLabels.length * 20, 1000);
       return {
-        width: '1200px'
+        width: width + 'px'
       };
     },
 

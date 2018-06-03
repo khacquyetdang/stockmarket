@@ -20,10 +20,10 @@ export default {
       'getstockpricefilter'
     ]),
     datasets: function() {
-      return this.$store.getters.getStockMonthlyValues;
+      return this.$store.getters.getActiveDatasets;
     },
     labels: function() {
-      return this.$store.getters.getStockMonthlyLabels;
+      return this.$store.getters.getActiveLabels;
     },
     newsymbol: function() {
       return this.$store.getters.getnewsymbols;
@@ -36,26 +36,8 @@ export default {
     config: function() {
 
       let labels = this.labels;
-      let datasets = [];
-      let stockMonthValues = this.datasets;
-      let colorsSymbols = this.$store.getters.getStockcolors;
-      let activeStockPriceFilter = this.getstockpricefilter;
-      Object.keys(stockMonthValues).forEach((value, index) => {
-        let colorDataset = colorsSymbols[value];
-        this.colors.push(colorDataset);
-        datasets.push({
-          label: value,
-          data: stockMonthValues[value].map(function(element) {
-            return element[activeStockPriceFilter];
-          }),
-          borderColor: colorDataset,
-          type: 'line',
-          pointRadius: 2,
-          fill: true,
-          lineTension: 0,
-          borderWidth: 2,
-        });
-      });
+      let datasets = this.datasets;
+      let activeStockPriceFilter = this.$store.getters.getstockpricefilter;
       let self = this;
       return {
         type: 'line',
@@ -120,7 +102,7 @@ export default {
               labelColor: function(tooltipItem, chart) {
                 return {
                   // borderColor: "red",
-                  backgroundColor: self.colors[tooltipItem.datasetIndex],
+                  backgroundColor: self.datasets[tooltipItem.datasetIndex].tooltipcolor,
                   borderColor: "rgba(0, 0, 0, 0.9)" // self.colors[tooltipItem.datasetIndex],
                 };
               },

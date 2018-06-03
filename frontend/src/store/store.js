@@ -7,7 +7,7 @@ import {
 } from '../../package.json';
 Vue.use(Vuex);
 
-let colorPanel = ['red', 'pink', 'purple', '#673AB7', '#3F51B5', '#2196F3', '#4CAF50', '#CDDC39', '#FFC107', '#795548'];
+let colorPanel = ['#673AB7', '#795548', '#3F51B5', '#2196F3', '#FFC107', '#4CAF50', '#CDDC39'];
 const options = {
   strict: true,
   state: {
@@ -54,8 +54,55 @@ const options = {
     },
     getStockcolors(state) {
       return state.stockcolors;
+    },
+    getActiveDatasets(state) {
+      let stockvalues = state.stockmonthlyvalues;
+      switch (state.stockperiodfilter) {
+        case constants.daily:
+          {
+            stockvalues = state.stockdailyvalues;
+            break;
+          }
+        case constants.weekly:
+          {
+            stockvalues = state.stockweeklyvalues;
+            break;
+          }
+      }
+      let datasets = Object.keys(stockvalues).map((value, index) => {
+        let colorDataset = state.stockcolors[value];
+        return {
+          label: value,
+          data: stockvalues[value].map(function(element) {
+            return element[state.stockpricefilter];
+          }),
+          borderColor: colorDataset,
+          tooltipcolor: colorDataset,
+          type: 'line',
+          pointRadius: 2,
+          fill: true,
+          lineTension: 0,
+          borderWidth: 2,
+        };
+      });
+      return datasets;
+    },
+    getActiveLabels(state) {
+      let stocklabels = state.stockmonthlylabels;
+      switch (state.stockperiodfilter) {
+        case constants.daily:
+          {
+            stocklabels = state.stockdailylabels;
+            break;
+          }
+        case constants.weekly:
+          {
+            stocklabels = state.stockweeklylabels;
+            break;
+          }
+      }
+      return stocklabels;
     }
-
   },
   mutations: {
     initialiseStore(state) {
