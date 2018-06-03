@@ -1,39 +1,35 @@
 import PrettyRadio from 'pretty-checkbox-vue/radio';
 import App from './index.html?style=./style.css';
 import 'pretty-checkbox/dist/pretty-checkbox.css';
+import * as constants from '../../constants';
 
 export default App({
   name: 'Filtre',
   data() {
     return {
-      period: 'period',
-      timefilter: this.$store.getters.getstocktimefilter
+      periodfilter: this.$store.getters.getstockperiodfilter,
+      pricefilter: this.$store.getters.getstockpricefilter,
+      daily: constants.daily,
+      weekly: constants.weekly,
+      monthly: constants.monthly,
+      marketOpen: constants.marketOpen,
+      marketHigh: constants.marketHigh,
+      marketLow: constants.marketLow,
+      marketClose: constants.marketClose,
     };
-  },
-  computed: {
-    isOpenSelected() {
-      return this.timefilter === '1. open';
-    },
-    isHighSelected() {
-      return this.timefilter === '2. high';
-    },
-    isLowSelected() {
-      return this.timefilter === '3. low';
-    },
-    isCloseSelected() {
-      return this.timefilter === '4. close';
-    }
   },
   components: {
     'p-radio': PrettyRadio
   },
   watch: {
-    period: function(val) {
+    periodfilter: function(val) {
       console.log('periodfilter', val);
+      this.$store.dispatch('setPeriodFilter', val);
+
     },
-    timefilter: function(val) {
-      console.log('timefilter', val);
-      this.$store.dispatch('setStocktimeFilter', val);
+    pricefilter: function(val) {
+      console.log('pricefilter', val);
+      this.$store.dispatch('setPriceFilter', val);
     }
   }
 });

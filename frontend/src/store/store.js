@@ -15,17 +15,26 @@ const options = {
     apikey: process.env.apikey,
     stockmonthly: {},
     stockmonthlyvalues: {},
-    stockmonthlabels: [],
+    stockmonthlylabels: [],
+    stockweekly: {},
+    stockweeklyvalues: {},
+    stockweeklylabels: [],
+    stockdaily: {},
+    stockdailyvalues: {},
+    stockdailylabels: [],
     newsymbols: null,
     stockcolors: {},
-    stocktimefilter: 'open',
-    stockdaily: new Map(),
-    stockweekly: new Map()
+    symbols: [],
+    stockpricefilter: constants.marketOpen,
+    stockperiodfilter: constants.monthly,
   },
 
   getters: {
-    getstocktimefilter(state) {
-      return state.stocktimefilter || '1. open';
+    getstockperiodfilter(state) {
+      return state.stockperiodfilter || constants.monthly;
+    },
+    getstockpricefilter(state) {
+      return state.stockpricefilter || constants.marketOpen;
     },
     getnewsymbols(state) {
       return state.newsymbols;
@@ -33,14 +42,14 @@ const options = {
     getApiKey(state) {
       return state.apikey;
     },
-    getStockMonthLabels(state) {
-      return state.stockmonthlabels;
+    getStockMonthlyLabels(state) {
+      return state.stockmonthlylabels;
     },
 
-    getStockMonthValues(state) {
+    getStockMonthlyValues(state) {
       return state.stockmonthlyvalues;
     },
-    getStockMonth(state) {
+    getStockMonthly(state) {
       return state.stockmonthly;
     },
     getStockcolors(state) {
@@ -64,12 +73,12 @@ const options = {
         }
       }
     },
-    setStockMonthLabel: function(state, labels) {
-      if (state.stockmonthlabels && state.stockmonthlabels.length < labels.length) {
-        state.stockmonthlabels = labels;
+    setStockMonthlyLabel: function(state, labels) {
+      if (state.stockmonthlylabels && state.stockmonthlylabels.length < labels.length) {
+        state.stockmonthlylabels = labels;
       }
     },
-    setStockMonthValues: function(state, params) {
+    setStockMonthlyValues: function(state, params) {
       let newsymbols = params.symbol;
       let newvalues = params.values;
       let newStockMonthValues = Object.assign({}, state.stockmonthlyvalues);
@@ -86,37 +95,154 @@ const options = {
       });
       state.stockcolors = stockcolors;
     },
-    setStockMonth: function(state, params) {
+    setStockMonthly: function(state, params) {
       let newStockMonthly = Object.assign({}, state.stockmonthly);
-      newStockMonthly[params.symbol] = params.stockmonth;
+      newStockMonthly[params.symbol] = params.stockmonthly;
       state.stockmonthly = newStockMonthly;
     },
-    setStocktimeFilter: function(state, activefilter) {
-      state.stocktimefilter = activefilter;
+
+
+    setStockWeeklyLabel: function(state, labels) {
+      if (state.stockweeklylabels && state.stockweeklylabels.length < labels.length) {
+        state.stockweeklylabels = labels;
+      }
+    },
+    setStockWeeklyValues: function(state, params) {
+      let newsymbols = params.symbol;
+      let newvalues = params.values;
+      let newStockWeeklyValues = Object.assign({}, state.stockweeklyvalues);
+      newStockWeeklyValues[newsymbols] = newvalues;
+      state.stockweeklyvalues = newStockWeeklyValues;
+
+      let stockcolors = {};
+      Object.keys(state.stockweeklyvalues).forEach((value, index) => {
+        if (index < colorPanel.length) {
+          stockcolors[value] = colorPanel[index];
+        } else {
+          stockcolors[value] = randomColor();
+        }
+      });
+      state.stockcolors = stockcolors;
+    },
+    setStockWeekly: function(state, params) {
+      let newStockWeekly = Object.assign({}, state.stockweekly);
+      newStockWeekly[params.symbol] = params.stockweekly;
+      state.stockweekly = newStockWeekly;
+    },
+
+
+    setStockDailyLabel: function(state, labels) {
+      if (state.stockdailylabels && state.stockdailylabels.length < labels.length) {
+        state.stockdailylabels = labels;
+      }
+    },
+    setStockDailyValues: function(state, params) {
+      let newsymbols = params.symbol;
+      let newvalues = params.values;
+      let newStockDailyValues = Object.assign({}, state.stockdailyvalues);
+      newStockDailyValues[newsymbols] = newvalues;
+      state.stockdailyvalues = newStockDailyValues;
+
+      let stockcolors = {};
+      Object.keys(state.stockdailyvalues).forEach((value, index) => {
+        if (index < colorPanel.length) {
+          stockcolors[value] = colorPanel[index];
+        } else {
+          stockcolors[value] = randomColor();
+        }
+      });
+      state.stockcolors = stockcolors;
+    },
+    setStockDaily: function(state, params) {
+      let newStockDaily = Object.assign({}, state.stockdaily);
+      newStockDaily[params.symbol] = params.stockdaily;
+      state.stockdaily = newStockDaily;
+    },
+
+
+    setPeriodFilter: function(state, activefilter) {
+      state.stockperiodfilter = activefilter;
+    },
+    setPriceFilter: function(state, activefilter) {
+      state.stockpricefilter = activefilter;
+    },
+    addSymbol: function(state, newsymbol) {
+      if (!state.symbols) {
+        state.symbol = [];
+      }
+      state.symbols.push(newsymbol);
     }
   },
   actions: {
-    setStockMonthLabel: function({
+    setStockMonthlyLabel: function({
       commit
     }, labels) {
-      commit('setStockMonthLabel', labels);
+      commit('setStockMonthlyLabel', labels);
     },
-    setStockMonthValues: function({
+    setStockMonthlyValues: function({
         commit
       },
       params
     ) {
-      commit('setStockMonthValues', params);
+      commit('setStockMonthlyValues', params);
     },
-    setStockMonth: function({
+    setStockMonthly: function({
       commit
     }, params) {
-      commit('setStockMonth', params);
+      commit('setStockMonthly', params);
     },
-    setStocktimeFilter: function({
+
+    setStockWeeklyLabel: function({
+      commit
+    }, labels) {
+      commit('setStockWeeklyLabel', labels);
+    },
+    setStockWeeklyValues: function({
+        commit
+      },
+      params
+    ) {
+      commit('setStockWeeklyValues', params);
+    },
+    setStockWeekly: function({
+      commit
+    }, params) {
+      commit('setStockWeekly', params);
+    },
+
+    setStockDailyLabel: function({
+      commit
+    }, labels) {
+      commit('setStockDailyLabel', labels);
+    },
+    setStockDailyValues: function({
+        commit
+      },
+      params
+    ) {
+      commit('setStockDailyValues', params);
+    },
+    setStockDaily: function({
+      commit
+    }, params) {
+      commit('setStockDaily', params);
+    },
+
+
+    setPeriodFilter: function({
       commit
     }, activefilter) {
-      commit('setStocktimeFilter', activefilter);
+      commit('setPeriodFilter', activefilter);
+    },
+    setPriceFilter: function({
+      commit
+    }, activefilter) {
+      commit('setPriceFilter', activefilter);
+    },
+    addSymbol: function({
+      commit
+    }, newsymbol) {
+      commit('addSymbol', newsymbol);
     }
   },
 };

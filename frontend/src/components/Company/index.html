@@ -2,12 +2,12 @@
   <v-layout row="row" wrap="wrap" class="piechartdetail">
     <v-flex justify-center align-center>
 
-      <v-flex md3>
+      <v-flex md4 offset-md4>
         <v-form autocomplete="off" ref="form" lazy-validation="lazy-validation">
 
-          <v-text-field placeholder="company symbol (NASDAQ code)" v-model="newsymbol" data-vv-name="newsymbol" v-validate="'required'"
-            data-vv-delay="100" data-vv-rules="required" solo required append-icon="add" :append-icon-cb="addCompanyStockSymbole"
-            :error-messages="errors.collect('newchoice')" class="newstock"></v-text-field>
+          <v-text-field placeholder="Company NASDAQ code" v-model="newsymbol" data-vv-name="newsymbol" v-validate="'required'" data-vv-delay="100"
+            data-vv-rules="required" solo required append-icon="add" :append-icon-cb="addCompanyStockSymbole" :error-messages="errors.collect('newchoice')"
+            class="newstock"></v-text-field>
           <v-alert v-if="error !== null" type="error" :value="true" v-html="error">
           </v-alert>
 

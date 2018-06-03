@@ -1,8 +1,22 @@
 <div class="filtreContainer">
+
   <div class="filtre">
-    <p-radio color="primary-o" v-model="timefilter" :checked="isOpenSelected" value="1. open" name="timefiltergroup">Open</p-radio>
-    <p-radio color="primary-o" v-model="timefilter" :checked="isHighSelected" value="2. high" name="timefiltergroup">High</p-radio>
-    <p-radio color="primary-o" v-model="timefilter" :checked="isLowSelected" value="3. low" name="timefiltergroup">Low</p-radio>
-    <p-radio color="primary-o" v-model="timefilter" :checked="isCloseSelected" value="4. close" name="timefiltergroup">Close</p-radio>
+    <label for="periodfiltergroup">Filtre by period</label>
+    <div id="periodfiltergroup">
+      <p-radio color="primary-o" v-model="periodfilter" :checked="daily === periodfilter" :value="daily" name="periodfiltergroup">Daily</p-radio>
+      <p-radio color="primary-o" v-model="periodfilter" :checked="weekly === periodfilter" :value="weekly" name="periodfiltergroup">Weekly</p-radio>
+      <p-radio color="primary-o" v-model="periodfilter" :checked="monthly === periodfilter" :value="monthly" name="periodfiltergroup">Monthly</p-radio>
+    </div>
   </div>
+
+  <div class="filtre">
+    <label for="periodfiltergroup">Filtre by price</label>
+    <div>
+      <p-radio color="primary-o" v-model="pricefilter" :checked="pricefilter  === marketOpen" :value="marketOpen" name="pricefiltergroup">Open</p-radio>
+      <p-radio color="primary-o" v-model="pricefilter" :checked="pricefilter  === marketHigh" :value="marketHigh" name="pricefiltergroup">High</p-radio>
+      <p-radio color="primary-o" v-model="pricefilter" :checked="pricefilter  === marketLow" :value="marketLow" name="pricefiltergroup">Low</p-radio>
+      <p-radio color="primary-o" v-model="pricefilter" :checked="pricefilter  === marketClose" :value="marketClose" name="pricefiltergroup">Close</p-radio>
+    </div>
+  </div>
+
 </div>

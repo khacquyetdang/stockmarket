@@ -17,13 +17,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getstocktimefilter'
+      'getstockpricefilter'
     ]),
     datasets: function() {
-      return this.$store.getters.getStockMonthValues;
+      return this.$store.getters.getStockMonthlyValues;
     },
     labels: function() {
-      return this.$store.getters.getStockMonthLabels;
+      return this.$store.getters.getStockMonthlyLabels;
     },
     newsymbol: function() {
       return this.$store.getters.getnewsymbols;
@@ -39,14 +39,14 @@ export default {
       let datasets = [];
       let stockMonthValues = this.datasets;
       let colorsSymbols = this.$store.getters.getStockcolors;
-      let activeStockTimeFilter = this.getstocktimefilter;
+      let activeStockPriceFilter = this.getstockpricefilter;
       Object.keys(stockMonthValues).forEach((value, index) => {
         let colorDataset = colorsSymbols[value];
         this.colors.push(colorDataset);
         datasets.push({
           label: value,
           data: stockMonthValues[value].map(function(element) {
-            return element[activeStockTimeFilter];
+            return element[activeStockPriceFilter];
           }),
           borderColor: colorDataset,
           type: 'line',
@@ -72,28 +72,29 @@ export default {
           scales: {
             xAxes: [{
               type: 'time',
-              distribution: 'series',
+              distribution: 'linear',
               ticks: {
                 source: 'labels',
-                callback: function(label, index, labels) {
-                  if (labels.length > 100) {
-                    if (index % 3 === 0) {
-                      return label;
-                    }
-                    return "";
-                  } else {
-                    if (index % 2 === 0) {
-                      return label;
-                    }
-                    return label;
-                  }
-                }
+                /*
+                                callback: function(label, index, labels) {
+                                  if (labels.length > 100) {
+                                    if (index % 3 === 0) {
+                                      return label;
+                                    }
+                                    return "";
+                                  } else {
+                                    if (index % 2 === 0) {
+                                      return label;
+                                    }
+                                    return label;
+                                  }
+                                } */
               }
             }],
             yAxes: [{
               scaleLabel: {
                 display: true,
-                labelString: activeStockTimeFilter + ' price ($)'
+                labelString: activeStockPriceFilter + ' price ($)'
               }
             }]
           },

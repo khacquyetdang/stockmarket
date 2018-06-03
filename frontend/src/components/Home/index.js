@@ -32,11 +32,11 @@ export default App({
   },
   computed: {
     styles: function() {
-      if (this.$store.getters.getStockMonthLabels.length > 200)
+      if (this.$store.getters.getStockMonthlyLabels.length > 200)
         return {
-          width: '3000px'
+          width: '3500px'
         };
-      if (this.$store.getters.getStockMonthLabels.length > 100) {
+      if (this.$store.getters.getStockMonthlyLabels.length > 100) {
         return {
           width: '2000px'
         };

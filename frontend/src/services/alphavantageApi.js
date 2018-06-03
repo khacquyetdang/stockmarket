@@ -14,17 +14,51 @@ export default {
   async fetchStockMonthly(symbol) {
     try {
       const response = await this.getStockValueMonthly(symbol);
-      let labels = Object.keys(response.data['Monthly Time Series']);
-      let values = Object.values(response.data['Monthly Time Series']);
-      store.dispatch('setStockMonthLabel', labels);
-      store.dispatch('setStockMonthValues', {
+      let monthlykeys = 'Monthly Time Series';
+      let labels = Object.keys(response.data[monthlykeys]);
+      let values = Object.values(response.data[monthlykeys]);
+      store.dispatch('setStockMonthlyLabel', labels);
+      store.dispatch('setStockMonthlyValues', {
         symbol,
         values,
       });
-      store.dispatch('setStockMonth', {
+      store.dispatch('setStockMonthly', {
         symbol,
-        stockmonth: response.data['Monthly Time Series'],
+        stockmonthly: response.data[monthlykeys],
       });
+
+
+      const responseWeekly = await this.getStockValueWeekly(symbol);
+      const weeklykeys = "Weekly Time Series";
+      let labelsWeekly = Object.keys(responseWeekly.data[weeklykeys]);
+      let valuesWeekly = Object.values(responseWeekly.data[weeklykeys]);
+      store.dispatch('setStockWeeklyLabel', labelsWeekly);
+      store.dispatch('setStockWeeklyValues', {
+        symbol,
+        values: valuesWeekly,
+      });
+      store.dispatch('setStockWeekly', {
+        symbol,
+        stockweekly: responseWeekly.data[weeklykeys],
+      });
+
+
+      const responseDaily = await this.getStockValueDaily(symbol);
+      const dailykey = "Time Series (Daily)";
+      let labelsDaily = Object.keys(responseDaily.data[dailykey]);
+      let valuesDaily = Object.values(responseDaily.data[dailykey]);
+      store.dispatch('setStockDailyLabel', labelsDaily);
+      store.dispatch('setStockDailyValues', {
+        symbol,
+        values: valuesDaily,
+      });
+      store.dispatch('setStockDaily', {
+        symbol,
+        stockdaily: responseDaily.data[dailykey],
+      });
+
+      store.dispatch('addSymbol', symbol);
+
       return true;
     } catch (error) {
       console.error('error:', error);
