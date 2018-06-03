@@ -4,7 +4,7 @@ export default App({
   name: 'Legende',
   data() {
     return {
-      companysymbols: Object.keys(this.$store.getters.getStockcolors),
+      companysymbols: this.$store.getters.getSymbols
     };
   },
   methods: {

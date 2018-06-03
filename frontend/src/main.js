@@ -16,7 +16,9 @@ Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
 store.subscribe((mutation, state) => {
-  localStorage.setItem(constants.stockMarketStoreKey, JSON.stringify(state));
+  if (mutation.type === "addSymbol") {
+    localStorage.setItem(constants.stockSymbolsKey, JSON.stringify(state.symbols));
+  }
 });
 
 /* eslint-disable no-new */

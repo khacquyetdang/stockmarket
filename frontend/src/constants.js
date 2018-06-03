@@ -1,4 +1,4 @@
-export const stockMarketStoreKey = "__stockMarketStore";
+export const stockSymbolsKey = "__stockSymbols";
 
 export const monthly = 'monthly';
 export const weekly = 'weekly';

@@ -2,9 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as constants from '../constants';
 import randomColor from 'randomcolor';
-import {
-  version
-} from '../../package.json';
 Vue.use(Vuex);
 
 let colorPanel = ['#673AB7', '#795548', '#3F51B5', '#2196F3', '#FFC107', '#4CAF50', '#CDDC39'];
@@ -30,6 +27,9 @@ const options = {
   },
 
   getters: {
+    getSymbols(state) {
+      return state.symbols;
+    },
     getstockperiodfilter(state) {
       return state.stockperiodfilter || constants.monthly;
     },
@@ -107,17 +107,15 @@ const options = {
   mutations: {
     initialiseStore(state) {
       // Check if the ID exists
-      if (localStorage.getItem(constants.stockMarketStoreKey)) {
-        let store = JSON.parse(localStorage.getItem(constants.stockMarketStoreKey));
+      if (localStorage.getItem(constants.stockSymbolsKey)) {
+        let symbols = JSON.parse(localStorage.getItem(constants.stockSymbolsKey));
 
         // Replace the state object with the stored item
-        if (store.version === version) {
-          this.replaceState(
-            Object.assign(state, store)
-          );
-        } else {
-          state.version = version;
-        }
+        this.replaceState(
+          Object.assign(state, {
+            symbols: symbols
+          })
+        );
       }
     },
     setStockMonthlyLabel: function(state, labels) {
@@ -161,15 +159,6 @@ const options = {
       newStockWeeklyValues[newsymbols] = newvalues;
       state.stockweeklyvalues = newStockWeeklyValues;
 
-      let stockcolors = {};
-      Object.keys(state.stockweeklyvalues).forEach((value, index) => {
-        if (index < colorPanel.length) {
-          stockcolors[value] = colorPanel[index];
-        } else {
-          stockcolors[value] = randomColor();
-        }
-      });
-      state.stockcolors = stockcolors;
     },
     setStockWeekly: function(state, params) {
       let newStockWeekly = Object.assign({}, state.stockweekly);
@@ -217,7 +206,19 @@ const options = {
       if (!state.symbols) {
         state.symbol = [];
       }
-      state.symbols.push(newsymbol);
+      if (state.symbols.indexOf(newsymbol) === -1) {
+        state.symbols.push(newsymbol);
+      }
+      let stockcolors = {};
+
+      state.symbols.forEach((value, index) => {
+        if (index < colorPanel.length) {
+          stockcolors[value] = colorPanel[index];
+        } else {
+          stockcolors[value] = randomColor();
+        }
+      });
+      state.stockcolors = stockcolors;
     }
   },
   actions: {
