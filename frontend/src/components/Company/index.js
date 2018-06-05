@@ -16,7 +16,7 @@ export default App({
     connect: function() {
       console.log('socket to notification channel connected');
     },
-    punch: function(val) {
+    message: function(val) {
       console.log('this method was fired by the socket server. eg: io.emit("punch", data)');
     }
   },

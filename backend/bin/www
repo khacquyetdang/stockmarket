@@ -31,14 +31,15 @@ io.on('connection', function (socket) {
       console.log("request");
     } /* */ ); // emit an event to the socket
   io.emit('broadcast', /* */ ); // emit an event to all connected sockets
-  socket.on('newsymbol', function (data) {
-    console.log("newsymbol server", data);
-  });
   socket.on('disconnect', () => {
     console.log("client disconnect");
   });
 
 });
+io.on('newsymbol', function (data) {
+  console.log("newsymbol server", data);
+});
+
 /**
  * Listen on provided port, on all network interfaces.
  */
