@@ -7,5 +7,6 @@ dotenv.load({
 
 module.exports = {
   NODE_ENV: '"development"',
-  apikey: JSON.stringify(process.env.ALPHAVANTAGE)
+  apikey: JSON.stringify(process.env.ALPHAVANTAGE),
+  socketUrl: JSON.stringify(process.env.socketUrl)
 };

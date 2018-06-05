@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
-
+var server = require('http').createServer();
 /**
  * Get port from environment and store in Express.
  */
@@ -21,6 +21,24 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+
+var io = require('socket.io')(server);
+io.on('connection', function (socket) {
+  console.log("client connect");
+  socket.emit('message', 'Vous êtes bien connecté !');
+  socket.emit('request',
+    function () {
+      console.log("request");
+    } /* */ ); // emit an event to the socket
+  io.emit('broadcast', /* */ ); // emit an event to all connected sockets
+  socket.on('newsymbol', function (data) {
+    console.log("newsymbol server", data);
+  });
+  socket.on('disconnect', () => {
+    console.log("client disconnect");
+  });
+
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -58,9 +76,9 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -83,8 +101,8 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
   debug('Listening on ' + bind);
 }
