@@ -7,33 +7,27 @@ export default App({
       newsymbol: null,
       error: null,
       count: 0,
+      connected: false,
     };
   },
   sockets: {
     disconnect: function() {
       console.log('socket to notification channel disconnected');
+      this.connected = false;
     },
     connect: function() {
       console.log('socket to notification channel connected');
+      this.connected = true;
     },
-    message: function(val) {
-      console.log('this method was fired by the socket server. eg: io.emit("punch", data)');
+    newsymbol: function(symbol) {
+      console.log('i received  a new symbol', symbol);
+      this.newsymbol = symbol;
+      this.addCompanyStockSymbole(false);
+
     }
   },
-  mounted() {
-    let self = this;
-    let mytimer = setInterval(function() {
-      if (self.count < 5) {
-        console.log("send new symbol");
-        self.$socket.emit('newsymbol', "count ");
-      } else {
-        clearInterval(mytimer);
-      }
-      self.count++;
-    }, 3000);
-  },
   methods: {
-    addCompanyStockSymbole: async function() {
+    async addCompanyStockSymbole(fromBtn = true) {
       if (this.newsymbol) {
         this.newsymbol = this.newsymbol.trim();
         // let res = await Api.fetchStockMonthly(this.newsymbol);
@@ -42,8 +36,12 @@ export default App({
         if (!res) {
           this.error = "<div>An error has occured. The symbol may not  exist</div>";
         } else {
-          this.$socket.emit('newsymbol', this.newsymbol);
+          if (this.connected && fromBtn) {
+            console.log("sending new symbol to server");
+            this.$socket.emit('newsymbol', this.newsymbol);
+          }
           this.error = null;
+          this.newsymbol = null;
         }
       }
     }

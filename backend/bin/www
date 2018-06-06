@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
+var Symbols = require('../EventHandlers/Symbols');
 var server = require('http').createServer();
 /**
  * Get port from environment and store in Express.
@@ -23,6 +24,10 @@ var server = http.createServer(app);
 
 
 var io = require('socket.io')(server);
+var appsockets = {
+  allSockets: []
+};
+
 io.on('connection', function (socket) {
   console.log("client connect");
   socket.emit('message', 'Vous êtes bien connecté !');
@@ -31,13 +36,27 @@ io.on('connection', function (socket) {
       console.log("request");
     } /* */ ); // emit an event to the socket
   io.emit('broadcast', /* */ ); // emit an event to all connected sockets
+
+  var eventHandlers = {
+    symbol: new Symbols(appsockets, socket),
+  };
+  // Bind events to handlers
+  for (var category in eventHandlers) {
+    var handler = eventHandlers[category].handler;
+    let asocket = eventHandlers[category].socket;
+    for (var event in handler) {
+      asocket.on(event, handler[event]);
+    }
+  }
+
+  appsockets.allSockets.push(socket);
+
   socket.on('disconnect', () => {
     console.log("client disconnect");
   });
 
-});
-io.on('newsymbol', function (data) {
-  console.log("newsymbol server", data);
+
+
 });
 
 /**

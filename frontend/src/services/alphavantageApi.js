@@ -14,6 +14,7 @@ export default {
   async fetchStockMonthly(symbol) {
     try {
       const response = await this.getStockValueMonthly(symbol);
+      console.log("symbols monthly", response);
       let monthlykeys = 'Monthly Time Series';
       let labels = Object.keys(response.data[monthlykeys]);
       let values = Object.values(response.data[monthlykeys]);
