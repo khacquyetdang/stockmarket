@@ -10,16 +10,14 @@ module.exports = (sequelize, DataTypes) => {
             unique: true,
             allowNull: false
         },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: function () {
-                return sequelize.NOW();
-            }
-        },
         description: {
             type: DataTypes.TEXT,
+            allowNull: true,
             defaultValue: null,
+        }
+    }, {
+        hooks: {
+            beforeUpdate: trimSymbol
         }
     });
 
