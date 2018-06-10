@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import CompanyApi from './services/companyApi';
 import Api from './services/alphavantageApi';
 
 export default {
@@ -23,11 +24,7 @@ export default {
   },
   mounted() {
     console.log('app mounted');
-    this.symbols.forEach(symbol => {
-      if (!this.$store.getters.getStockMonthly[symbol]) {
-        Api.fetchStockMonthly(symbol);
-      }
-    });
+    CompanyApi.fetchCompany();
   },
   watch: {
     symbols(vals) {

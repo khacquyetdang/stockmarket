@@ -33,9 +33,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  beforeCreate() {
-    this.$store.commit('initialiseStore');
-  },
   beforeDestroy() {
     console("before Destroy");
     this.$socket.close();

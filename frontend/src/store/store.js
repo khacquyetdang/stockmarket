@@ -219,6 +219,19 @@ const options = {
         }
       });
       state.stockcolors = stockcolors;
+    },
+    setSymbols: function(state, symbols) {
+      state.symbol = symbols;
+      let stockcolors = {};
+
+      state.symbols.forEach((value, index) => {
+        if (index < colorPanel.length) {
+          stockcolors[value] = colorPanel[index];
+        } else {
+          stockcolors[value] = randomColor();
+        }
+      });
+      state.stockcolors = stockcolors;
     }
   },
   actions: {
@@ -291,6 +304,11 @@ const options = {
       commit
     }, newsymbol) {
       commit('addSymbol', newsymbol);
+    },
+    setSymbols: function({
+      commit
+    }, symbols) {
+      commit('setSymbols', symbols);
     }
   },
 };

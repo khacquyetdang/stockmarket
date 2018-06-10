@@ -65,14 +65,14 @@ io.on('connection', function (socket) {
 /**
  * Listen on provided port, on all network interfaces.
  */
+const isDev = process.env.NODE_ENV !== 'production';
 sequelize.sync({
-  force: true
+  force: isDev
 }).then(() => {
   console.log("sync db ok");
   server.listen(port);
   server.on('error', onError);
   server.on('listening', onListening);
-
 });
 
 

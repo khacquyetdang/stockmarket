@@ -5,6 +5,18 @@ const {
 
 const Op = Sequelize.Op;
 module.exports = {
+    /**
+     * return 5 last company symbol
+     */
+    list: function (req, res) {
+        Company.findAll({
+            order: 'createdAt DESC'
+        }).then(companies => {
+            req.send({
+                companies: companies
+            });
+        });
+    },
     addCompany: async function (asymbol) {
         const companies = await Company.findAll({
             where: {
