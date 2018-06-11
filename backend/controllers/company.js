@@ -14,13 +14,20 @@ exports.list = function (req, res) {
             ['createdAt', 'DESC']
         ]
     }).then(companies => {
+        companies = companies.map(company => {
+            company = company.dataValues;
+            company.stockdaily = JSON.parse(company.stockdaily);
+            company.stockweekly = JSON.parse(company.stockweekly);
+            company.stockmonthly = JSON.parse(company.stockmonthly);
+            return company;
+        })
         res.status(HttpStatus.OK).send({
             companies: companies
         });
     });
 }
 
-exports.addCompany = async function (asymbol) {
+exports.addCompany = async function (asymbol, stockdaily, stockweekly, stockmonthly) {
     const companies = await Company.findAll({
         where: {
             symbol: asymbol
@@ -28,10 +35,24 @@ exports.addCompany = async function (asymbol) {
     });
     console.log('company found', companies);
     if (companies && companies.length > 0) {
+        // update
+        let company = await Company.update({
+            stockdaily: JSON.stringify(stockdaily),
+            stockweekly: JSON.stringify(stockweekly),
+            stockmonthly: JSON.stringify(stockmonthly)
+        }, {
+            where: {
+                symbol: asymbol
+            }
+        });
+        console.log('company created', company);
         return false;
     }
-    const company = await Company.create({
-        symbol: asymbol
+    let company = await Company.create({
+        symbol: asymbol,
+        stockdaily: JSON.stringify(stockdaily),
+        stockweekly: JSON.stringify(stockweekly),
+        stockmonthly: JSON.stringify(stockmonthly)
     });
     console.log('company created', company);
     return true;

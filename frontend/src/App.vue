@@ -14,7 +14,6 @@
 <script>
 import CompanyApi from './services/companyApi';
 import Api from './services/alphavantageApi';
-
 export default {
   name: 'App',
   computed: {

@@ -10,6 +10,19 @@ module.exports = (sequelize, DataTypes) => {
             unique: true,
             allowNull: false
         },
+        stockdaily: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        stockweekly: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        stockmonthly: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+
         description: {
             type: DataTypes.TEXT,
             allowNull: true,

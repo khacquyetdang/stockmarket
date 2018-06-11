@@ -1,5 +1,8 @@
 import App from './index.html?style=./app.css';
 import Api from '../../services/alphavantageApi';
+import {
+  handlerCompanyData
+} from '../../utils';
 export default App({
   data() {
     return {
@@ -19,10 +22,10 @@ export default App({
       console.log('socket to notification channel connected');
       this.connected = true;
     },
-    newsymbol: function(symbol) {
-      console.log('i received  a new symbol', symbol);
-      this.newsymbol = symbol;
-      this.addCompanyStockSymbole(false);
+    newcompany: function(company) {
+      console.log('i received  a new symbol', company);
+
+      handlerCompanyData(company);
 
     }
   },
@@ -31,14 +34,14 @@ export default App({
       if (this.newsymbol) {
         this.newsymbol = this.newsymbol.trim();
         // let res = await Api.fetchStockMonthly(this.newsymbol);
-        let res = await Api.fetchStockMonthly(this.newsymbol);
+        let company = await Api.fetchStockMonthly(this.newsymbol);
 
-        if (!res) {
+        if (!company) {
           this.error = "<div>An error has occured. The symbol may not  exist</div>";
         } else {
           if (this.connected && fromBtn) {
-            console.log("sending new symbol to server");
-            this.$socket.emit('newsymbol', this.newsymbol);
+            console.log("sending newcompany to server");
+            this.$socket.emit('newcompany', company);
           }
           this.error = null;
           this.newsymbol = null;
