@@ -10,7 +10,7 @@ function companyApi() {
 export default {
   async fetchCompany(stocksymbol) {
     let response = await companyApi().get('/company/list', {});
-    let companies = response.companies;
+    let companies = response.data.companies;
     var symbols = companies.map(element => element.symbol);
     store.dispatch('setSymbols', symbols);
   },

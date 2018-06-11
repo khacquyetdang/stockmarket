@@ -1,11 +1,13 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var companyRouter = require('./routes/company');
+const configCors = require('./config/cors');
 
 var app = express();
 
@@ -20,6 +22,7 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors(configCors.corsOptions));
 
 app.use('/', indexRouter);
 app.use('/company', companyRouter);

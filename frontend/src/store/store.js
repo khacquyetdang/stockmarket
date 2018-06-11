@@ -105,19 +105,6 @@ const options = {
     }
   },
   mutations: {
-    initialiseStore(state) {
-      // Check if the ID exists
-      if (localStorage.getItem(constants.stockSymbolsKey)) {
-        let symbols = JSON.parse(localStorage.getItem(constants.stockSymbolsKey));
-
-        // Replace the state object with the stored item
-        this.replaceState(
-          Object.assign(state, {
-            symbols: symbols
-          })
-        );
-      }
-    },
     setStockMonthlyLabel: function(state, labels) {
       if (state.stockmonthlylabels && state.stockmonthlylabels.length < labels.length) {
         state.stockmonthlylabels = labels;
@@ -221,7 +208,7 @@ const options = {
       state.stockcolors = stockcolors;
     },
     setSymbols: function(state, symbols) {
-      state.symbol = symbols;
+      state.symbols = symbols;
       let stockcolors = {};
 
       state.symbols.forEach((value, index) => {
