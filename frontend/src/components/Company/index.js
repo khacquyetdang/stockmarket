@@ -11,6 +11,7 @@ export default App({
       error: null,
       count: 0,
       connected: false,
+      request_inprogress: false,
     };
   },
   sockets: {
@@ -33,6 +34,7 @@ export default App({
     async addCompanyStockSymbole(fromBtn = true) {
       if (this.newsymbol) {
         this.newsymbol = this.newsymbol.trim();
+        this.request_inprogress = true;
         // let res = await Api.fetchStockMonthly(this.newsymbol);
         let company = await Api.fetchStockMonthly(this.newsymbol);
 
@@ -46,6 +48,7 @@ export default App({
           this.error = null;
           this.newsymbol = null;
         }
+        this.request_inprogress = false;
       }
     }
   }

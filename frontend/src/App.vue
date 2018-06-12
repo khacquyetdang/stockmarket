@@ -25,16 +25,6 @@ export default {
     console.log('app mounted');
     CompanyApi.fetchCompany();
   },
-  watch: {
-    symbols(vals) {
-      console.log('symbols changed', vals);
-      vals.forEach(symbol => {
-        if (!this.$store.getters.getStockMonthly[symbol]) {
-          Api.fetchStockMonthly(symbol);
-        }
-      });
-    },
-  },
 };
 </script>
 
