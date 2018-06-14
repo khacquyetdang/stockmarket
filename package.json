@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Server side for voting app",
+  "description": "Stockmarket app",
   "main": "index.js",
   "engines": {
     "npm": "=5.6.0",
@@ -13,7 +13,7 @@
   "scripts": {
     "start:development": "cd server && cross-env PORT=4000; NODE_ENV=development node src/index.js --exec 'npm run lint && node'",
     "start:production": "cross-env NODE_ENV=production node src/index.js --exec 'npm run lint && node'",
-    "start": "cd backend && npm install && npm run start:production"
+    "start": "cd frontend && npm run build && cd ../backend && npm run start:production"
   },
   "author": "Khac Quyet DANG",
   "license": "MIT",
