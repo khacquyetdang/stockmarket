@@ -14,7 +14,7 @@
     "start:development": "cd server && cross-env PORT=4000; NODE_ENV=development node src/index.js --exec 'npm run lint && node'",
     "start:production": "cross-env NODE_ENV=production node src/index.js --exec 'npm run lint && node'",
     "build:frontend_prod": "cd frontend && npm run build",
-    "start": "cd backend && npm run start:production"
+    "start": "cd backend && npm install && npm run start:production"
   },
   "author": "Khac Quyet DANG",
   "license": "MIT",
