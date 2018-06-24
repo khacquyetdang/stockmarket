@@ -10,6 +10,7 @@ const options = {
   state: {
     version: '',
     apikey: process.env.apikey,
+    fetchingAllCompanyData: false,
     stockmonthly: {},
     stockmonthlyvalues: {},
     stockmonthlylabels: [],
@@ -27,6 +28,9 @@ const options = {
   },
 
   getters: {
+    getFetchingAllCompanyData(state) {
+      return state.fetchingAllCompanyData;
+    },
     getSymbols(state) {
       return state.symbols;
     },
@@ -105,6 +109,9 @@ const options = {
     }
   },
   mutations: {
+    setFetchingAllCompanyData(state, isFetching) {
+      state.fetchingAllCompanyData = isFetching;
+    },
     setStockMonthlyLabel: function(state, labels) {
       if (state.stockmonthlylabels && state.stockmonthlylabels.length < labels.length) {
         state.stockmonthlylabels = labels;
@@ -222,6 +229,11 @@ const options = {
     }
   },
   actions: {
+    setFetchingAllCompanyData: function({
+      commit
+    }, isFetching) {
+      commit('setFetchingAllCompanyData', isFetching);
+    },
     setStockMonthlyLabel: function({
       commit
     }, labels) {

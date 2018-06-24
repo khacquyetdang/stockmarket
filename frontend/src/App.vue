@@ -22,6 +22,7 @@ export default {
   },
   mounted() {
     console.log('app mounted');
+    this.$store.dispatch('setFetchingAllCompanyData', true);
     CompanyApi.fetchCompany();
   },
 };

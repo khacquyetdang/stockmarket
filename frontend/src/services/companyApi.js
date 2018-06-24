@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import store from '@/store/store';
+import store from '@/store/store';
 import {
   handlerCompanyData
 } from '../utils';
@@ -15,7 +15,7 @@ export default {
     let response = await companyApi().get('/company/list', {});
     let companies = response.data.companies;
     companies.map(company => handlerCompanyData(company));
-    // store.dispatch('setSymbols', symbols);
+    store.dispatch('setFetchingAllCompanyData', false);
     // return symbols;
   },
 };
