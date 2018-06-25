@@ -3,3 +3,17 @@
   overflow-x: auto;
   overflow: auto;
 }
+
+.emptyContainer {
+  display: flex;
+  min-height: 200px;
+  align-items: center;
+  border: 1px solid;
+  text-align: center;
+  align-self: center;
+  justify-content: center;
+}
+
+.emptyContainer h1 {
+  color: red;
+}

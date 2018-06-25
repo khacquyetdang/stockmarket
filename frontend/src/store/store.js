@@ -10,6 +10,7 @@ const options = {
   state: {
     version: '',
     apikey: process.env.apikey,
+    fetchingAllCompanyData: false,
     stockmonthly: {},
     stockmonthlyvalues: {},
     stockmonthlylabels: [],
@@ -27,6 +28,9 @@ const options = {
   },
 
   getters: {
+    getFetchingAllCompanyData(state) {
+      return state.fetchingAllCompanyData;
+    },
     getSymbols(state) {
       return state.symbols;
     },
@@ -105,6 +109,9 @@ const options = {
     }
   },
   mutations: {
+    setFetchingAllCompanyData(state, isFetching) {
+      state.fetchingAllCompanyData = isFetching;
+    },
     setStockMonthlyLabel: function(state, labels) {
       if (state.stockmonthlylabels && state.stockmonthlylabels.length < labels.length) {
         state.stockmonthlylabels = labels;
@@ -145,7 +152,6 @@ const options = {
       let newStockWeeklyValues = Object.assign({}, state.stockweeklyvalues);
       newStockWeeklyValues[newsymbols] = newvalues;
       state.stockweeklyvalues = newStockWeeklyValues;
-
     },
     setStockWeekly: function(state, params) {
       let newStockWeekly = Object.assign({}, state.stockweekly);
@@ -207,6 +213,59 @@ const options = {
       });
       state.stockcolors = stockcolors;
     },
+    removeSymbol: function(state, symbol) {
+      if (!state.symbols) {
+        state.symbols = [];
+      }
+      let indexSymbol = state.symbols.indexOf(symbol);
+      if (indexSymbol !== -1) {
+        state.symbols.splice(indexSymbol, 1);
+      }
+      let stockcolors = {};
+
+      state.symbols.forEach((value, index) => {
+        if (index < colorPanel.length) {
+          stockcolors[value] = colorPanel[index];
+        } else {
+          stockcolors[value] = randomColor();
+        }
+      });
+      state.stockcolors = stockcolors;
+
+      let newStockDaily = Object.assign({}, state.stockdaily);
+      delete state.stockdaily[symbol];
+      state.stockdaily = newStockDaily;
+
+      let newStockDailyValues = Object.assign({}, state.stockdailyvalues);
+      delete newStockDailyValues[symbol];
+      state.stockdailyvalues = newStockDailyValues;
+
+
+      let newStockWeekly = Object.assign({}, state.stockweekly);
+      delete state.stockweekly[symbol];
+      state.stockweekly = newStockWeekly;
+
+      let newStockWeeklyValues = Object.assign({}, state.stockweeklyvalues);
+      delete newStockWeeklyValues[symbol];
+      state.stockweeklyvalues = newStockWeeklyValues;
+
+
+      let newStockMonthly = Object.assign({}, state.stockmonthly);
+      delete newStockMonthly[symbol];
+      state.stockmonthly = newStockMonthly;
+
+      let newStockMonthValues = Object.assign({}, state.stockmonthlyvalues);
+      delete newStockMonthValues[symbol];
+      state.stockmonthlyvalues = newStockMonthValues;
+
+
+      delete state.stockmonthlyvalues[symbol];
+      delete state.stockdailyvalues[symbol];
+
+      delete state.stockmonthly[symbol];
+      delete state.stockdaily[symbol];
+
+    },
     setSymbols: function(state, symbols) {
       state.symbols = symbols;
       let stockcolors = {};
@@ -222,6 +281,11 @@ const options = {
     }
   },
   actions: {
+    setFetchingAllCompanyData: function({
+      commit
+    }, isFetching) {
+      commit('setFetchingAllCompanyData', isFetching);
+    },
     setStockMonthlyLabel: function({
       commit
     }, labels) {
@@ -292,6 +356,12 @@ const options = {
     }, newsymbol) {
       commit('addSymbol', newsymbol);
     },
+    removeSymbol: function({
+      commit
+    }, symbol) {
+      commit('removeSymbol', symbol);
+    },
+
     setSymbols: function({
       commit
     }, symbols) {

@@ -20,18 +20,29 @@ export default App({
   mounted() {
     this.ismounted = true;
   },
-  updated() {
-    this.scrollBarChartRight();
-  },
   methods: {
     scrollBarChartRight() {
+      let isScrollable = true;
+      if (isScrollable) {
+        return;
+      }
       var elem = this.$el.querySelector("#barchart");
       var container = this.$el.querySelector(".barchartContainer");
       container.scrollLeft = elem.clientWidth;
     }
   },
   computed: {
-    styles: function() {
+    isActiveDatasetEmpty() {
+      return this.$store.getters.getActiveDatasets === null ||
+        this.$store.getters.getActiveDatasets.length === 0 ||
+        this.$store.getters.getSymbols === null ||
+        this.$store.getters.getSymbols.length === 0;
+    },
+    isFetchingAllCompanyData() {
+      return this.$store.getters.getFetchingAllCompanyData;
+    },
+
+    styles() {
       let width = Math.max(this.$store.getters.getActiveLabels.length * 20, 1000);
       return {
         width: width + 'px'
@@ -40,7 +51,7 @@ export default App({
 
   },
   watch: {
-    ismounted(val) {
+    isFetchingAllCompanyData(val) {
       this.scrollBarChartRight();
     }
   }

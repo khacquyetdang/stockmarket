@@ -27,6 +27,18 @@ exports.list = function (req, res) {
     });
 }
 
+exports.removeCompany = async function (asymbol) {
+    const rowdeleted = await Company.destroy({
+        where: {
+            symbol: asymbol
+        }
+    });
+    console.log('company deleted', rowdeleted);
+    if (rowdeleted > 0) {
+        return true;
+    }
+    return false;
+}
 exports.addCompany = async function (asymbol, stockdaily, stockweekly, stockmonthly) {
     const companies = await Company.findAll({
         where: {

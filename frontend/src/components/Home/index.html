@@ -1,8 +1,19 @@
 <div>
-  <Filtre/>
-  <div class="barchartContainer">
-    <bar-chart id="barchart" :styles="styles" />
+  <div v-if="isFetchingAllCompanyData">
+    <v-progress-circular :size="100" indeterminate color="primary"></v-progress-circular>
   </div>
+  <template v-else>
+    <Filtre/>
+    <div class="barchartContainer">
+      <div v-if="isActiveDatasetEmpty" class="emptyContainer">
+        <h1>
+          There is no date yet. Please add a symbol
+        </h1>
+      </div>
+      <bar-chart v-else id="barchart" :styles="styles" />
+    </div>
+  </template>
   <Legende/>
+  </template>
   <company></company>
 </div>
