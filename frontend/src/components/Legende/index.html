@@ -3,5 +3,10 @@
     <div :style="getStylesForSymbol(stocksymbol)">
     </div>
     <strong>{{ stocksymbol }} </strong>
+    <span class="group pa-2" @click="removeSymbolClick(stocksymbol)">
+      <v-icon>clear</v-icon>
+    </span>
   </div>
+  <v-alert v-if="error !== null" type="error" :value="true" v-html="error">
+  </v-alert>
 </div>
